@@ -7,8 +7,8 @@ import (
 
 //Report is a weather report
 type Report struct {
-	WindSpeed   int
-	Temperature int
+	WindSpeed   float64
+	Temperature float64
 }
 
 //Service defines a service that can be called to provide weather info.

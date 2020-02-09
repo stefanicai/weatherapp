@@ -3,9 +3,10 @@ package openweather
 import (
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
+	"strconv"
 
+	"github.com/spyzhov/ajson"
 	"github.com/stefanicai/weatherapp/weather"
 )
 
@@ -31,11 +32,48 @@ func (s Service) Report(query string) (*weather.Report, error) {
 		return nil, err
 	}
 	respData, _ := ioutil.ReadAll(resp.Body)
-	log.Println(string(respData))
-	return &weather.Report{}, nil
+	//log.Printf("%s",string(respData))
+	report, err := extract(respData)
+	return report, err
 }
 
 //Name of the service
 func (s Service) Name() string {
 	return "OpenWeather"
+}
+
+//extract parses the provided json and extracts required values
+//It assumes that the json is in the correct format, as per the API specs
+func extract(j []byte) (r *weather.Report, e error) {
+	defer func() {
+		if r := recover(); r != nil {
+			e = r.(error)
+		}
+	}()
+
+	node, err := ajson.Unmarshal(j)
+	if err != nil {
+		return r, err
+	}
+
+	r = new(weather.Report)
+
+	//API returns one value only
+	values, err := node.JSONPath("$.main.temp")
+	temperature, err := strconv.ParseFloat(values[0].String(), 64)
+	if err != nil {
+		return nil, err
+	} else {
+		r.Temperature = temperature
+	}
+
+	values, err = node.JSONPath("$.wind.speed")
+	windSpeed, err := strconv.ParseFloat(values[0].String(), 64)
+	if err != nil {
+		return nil, err
+	} else {
+		r.WindSpeed = windSpeed
+	}
+
+	return r, nil
 }
