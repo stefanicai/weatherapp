@@ -42,7 +42,6 @@ func (s Service) Name() string {
 }
 
 //extract parses the provided json and extracts required values
-//It assumes that the json is in the correct format, as per the API specs
 func extract(j []byte) (r *weather.Report, e error) {
 	result := jsonResult{}
 	e = json.Unmarshal(j, &result)
@@ -60,7 +59,7 @@ func extract(j []byte) (r *weather.Report, e error) {
 }
 
 //create JSON structures to extract values. Works well for simple structures, but can be a bit much for more complex
-//json-s where we only need some fields. Using this here as a different method.
+//json-s where we only need some fields. Using this here as a different method. See openweather for a query based alternative
 type jsonReport struct {
 	WindSpeed   float64 `json:"wind_speed"`
 	Temperature float64 `json:"temperature"`

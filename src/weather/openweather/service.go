@@ -45,6 +45,9 @@ func (s Service) Name() string {
 //It assumes that the json is in the correct format, as per the API specs
 func extract(j []byte) (r *weather.Report, e error) {
 	defer func() {
+		//This is to handle potential panics coming from the json parser.
+		//I realise now that I've removed the code that was potentially panic-ing as it wasn't needed.
+		//So this code might need to be removed. Just too late in the night to process that.
 		if r := recover(); r != nil {
 			e = r.(error)
 		}
