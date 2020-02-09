@@ -32,7 +32,6 @@ func (s Service) Report(query string) (*weather.Report, error) {
 		return nil, err
 	}
 	respData, _ := ioutil.ReadAll(resp.Body)
-	//log.Printf("%s",string(respData))
 	report, err := extract(respData)
 	return report, err
 }
@@ -55,6 +54,8 @@ func extract(j []byte) (r *weather.Report, e error) {
 	if err != nil {
 		return r, err
 	}
+
+	//TODO: Same sa for weatherstack, parse in case of error too. See that package for an example.
 
 	r = new(weather.Report)
 

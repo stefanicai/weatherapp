@@ -1,4 +1,4 @@
-package openweather
+package weatherstack
 
 import (
 	. "github.com/stretchr/testify/assert"
@@ -6,23 +6,23 @@ import (
 )
 
 func TestConversionValidJson(t *testing.T) {
-	s := []byte(`{"main":{"temp":10.1},"wind":{"speed":101.3}}`)
+	s := []byte(`{"current":{"wind_speed":10.1, "temperature":101.3}}`)
 	report, err := extract(s)
 	Nil(t, err)
 	NotNil(t, report)
-	Equal(t, 10.1, report.Temperature)
-	Equal(t, 101.3, report.WindSpeed)
+	Equal(t, 101.3, report.Temperature)
+	Equal(t, 10.1, report.WindSpeed)
 }
 
 func TestConversionInvalidJson(t *testing.T) {
-	s := []byte(`{"main":{"temp":"10.1""},"wind":{"speed":"not number"}}`)
+	s := []byte(`{"current":{"wind_speed":"not float", "temperature":"101.3"}}`)
 	report, err := extract(s)
 	NotNil(t, err)
 	Nil(t, report)
 }
 
 func TestConversionInvalidJsonMissingFields(t *testing.T) {
-	s := []byte(`{"main":{"tempNot":"10.1""},"windNot":{"speed":"not number"}}`)
+	s := []byte(`{"current":{"wind_speed":10.1}`)
 	report, err := extract(s)
 	NotNil(t, err)
 	Nil(t, report)
