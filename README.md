@@ -11,7 +11,7 @@ Simple API to provide basic weather info
 - change current directory to be `<project path>/src` (basically `cd weatherapp/src`)
 - run the following command `go run main.go`.
 
-### Getting the weather
+### Using the app
 Go to `http://localhost:8080/` - that will give you the weather for Melbourne,AU
 If you'd like the weather for another city, use the `query` parameter. E.g. `http://localhost:8080?query=Sydney,AU` will give you the weather for Sydney.
 
