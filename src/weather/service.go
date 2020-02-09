@@ -7,8 +7,8 @@ import (
 
 //Report is a weather report
 type Report struct {
-	WindSpeed   float64
-	Temperature float64
+	WindSpeed   float64 `json:"wind_speed"`
+	Temperature float64 `json:"temperature_degrees"`
 }
 
 //Service defines a service that can be called to provide weather info.
@@ -37,5 +37,5 @@ func (ws *WService) Report(query string) (*Report, error) {
 			log.Printf("Service %s failed with error: %v\n", s.Name(), err)
 		}
 	}
-	return nil, errors.New("Service Unavailable")
+	return nil, errors.New("service unavailable")
 }
