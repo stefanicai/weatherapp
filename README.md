@@ -26,6 +26,8 @@ If you'd like the weather for another city, use the `query` parameter. E.g. `htt
 - The http server code is pretty basic. E.g. `CORS` would need to be handled if this is to be exported as an API. As well as proper/appropriate HTTP codes and error messages to be returned. As well as potentially a healthcheck to be used by kubernetes etc
 - For a commercial implementation, I'd probably use `GraphQL` to give the client the possibility to select what info to receive.
 - Caching (distributed) might be useful if the service is highly used. It could also cover for cases when both services are down.
+- Another option to improve performance could be calling the various services in parralel (using go routines) and responding to the client whenever the first one has replied. It would add some load on the other services and the processor, but could potentially be faster.
+- One case we're not covering is in case all services are down. Do we want to retry a few times for each service, or just return the error to the client? For this, we could allow the user to provide a timout, based on how much they can wait for the call. Or otherwise they can just try and call the service again.
 
 ### Some more about the tech
 - json parsing is done differently for the two services:
